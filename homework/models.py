@@ -14,19 +14,16 @@ class Product:
         self.quantity = quantity
 
     def check_quantity(self, quantity) -> bool:
-        """
-        TODO Верните True если количество продукта больше или равно запрашиваемому
-            и False в обратном случае
-        """
-        raise NotImplementedError
+        if self.quantity >= quantity:
+            return True
+        else:
+            return False
 
     def buy(self, quantity):
-        """
-        TODO реализуйте метод покупки
-            Проверьте количество продукта используя метод check_quantity
-            Если продуктов не хватает, то выбросите исключение ValueError
-        """
-        raise NotImplementedError
+        if self.check_quantity(quantity):
+            self.quantity -= quantity
+        else:
+            raise ValueError
 
     def __hash__(self):
         return hash(self.name + self.description)
@@ -38,8 +35,7 @@ class Cart:
     TODO реализуйте все методы класса
     """
 
-    # Словарь продуктов и их количество в корзине
-    products: dict[Product, int]
+    # Словарь продуктов и их количество в корзине    products: dict[Product, int]
 
     def __init__(self):
         # По-умолчанию корзина пустая
@@ -50,7 +46,13 @@ class Cart:
         Метод добавления продукта в корзину.
         Если продукт уже есть в корзине, то увеличиваем количество
         """
-        raise NotImplementedError
+        if product.check_quantity(buy_count) and buy_count > 0:
+            if product in self.products:
+                self.products[product] += buy_count
+            else:
+                self.products[product] = buy_count
+        else:
+            raise ValueError
 
     def remove_product(self, product: Product, remove_count=None):
         """
@@ -58,13 +60,24 @@ class Cart:
         Если remove_count не передан, то удаляется вся позиция
         Если remove_count больше, чем количество продуктов в позиции, то удаляется вся позиция
         """
-        raise NotImplementedError
+        if self.products.get(product):
+            if not remove_count:
+                self.products.pop(product)
+            elif remove_count >= self.products[product]:
+                self.products.pop(product)
+            else:
+                self.products[product] -= remove_count
+        else:
+            raise ValueError
 
     def clear(self):
-        raise NotImplementedError
+        self.products.clear()
 
     def get_total_price(self) -> float:
-        raise NotImplementedError
+        total_price = 0
+        for key in self.products.keys():
+            total_price += key.price * self.products.get(key)
+        return total_price
 
     def buy(self):
         """
@@ -72,4 +85,7 @@ class Cart:
         Учтите, что товаров может не хватать на складе.
         В этом случае нужно выбросить исключение ValueError
         """
-        raise NotImplementedError
+        for product in self.products.keys():
+            product.buy(self.products.get(product))
+
+        self.clear()
