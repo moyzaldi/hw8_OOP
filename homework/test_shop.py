@@ -30,7 +30,7 @@ class TestProducts:
     def test_product_buy_is_enough(self, product):
         quantity_before = product.quantity
         product.buy(100)
-        assert product.quantity ==quantity_before-100
+        assert product.quantity == quantity_before - 100
 
     def test_product_buy_more_than_available(self, product):
         with pytest.raises(ValueError):
@@ -126,7 +126,6 @@ class TestCart:
         total_price = cart.get_total_price()
         assert total_price == product.price * q_product
 
-
     def test_total_price_two_products(self, cart, product, product2):
         q_product = 100
         q_product2 = 100
@@ -136,7 +135,6 @@ class TestCart:
         total_price = cart.get_total_price()
         assert total_price == product.price * q_product + product2.price * q_product2
 
-
     def test_buy_product(self, cart, product):
         product_in_storage = product.quantity
         q_product = 100
@@ -145,8 +143,7 @@ class TestCart:
         assert product.quantity == product_in_storage - q_product
         assert not cart.products
 
-
-    def test_buy_two_product(self, cart, product,product2):
+    def test_buy_two_product(self, cart, product, product2):
         product_in_storage = product.quantity
         product2_in_storage = product2.quantity
         q_product = 100
@@ -158,7 +155,6 @@ class TestCart:
         assert product.quantity == product_in_storage - q_product
         assert product2.quantity == product2_in_storage - q_product2
         assert not cart.products
-
 
     def test_buy_over_product(self, cart, product):
         cart.add_product(product, product.quantity)
@@ -172,9 +168,3 @@ class TestCart:
         cart.products[product] = 0
         cart.buy()
         assert product.quantity == product_in_storage
-
-
-
-
-
-

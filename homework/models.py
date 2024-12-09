@@ -48,13 +48,11 @@ class Cart:
         """
         if product.check_quantity(buy_count) and buy_count > 0:
             if product in self.products:
-                self.products[product]+=buy_count
+                self.products[product] += buy_count
             else:
-                self.products[product]=buy_count
+                self.products[product] = buy_count
         else:
             raise ValueError
-
-
 
     def remove_product(self, product: Product, remove_count=None):
         """
@@ -74,7 +72,6 @@ class Cart:
 
     def clear(self):
         self.products.clear()
-
 
     def get_total_price(self) -> float:
         total_price = 0
